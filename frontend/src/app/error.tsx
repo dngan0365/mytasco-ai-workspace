@@ -1,0 +1,1 @@
+"use client"; import { ErrorMessage } from "@/components/common/ErrorMessage"; export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) { return <ErrorMessage message={error.message} retry={reset}/>; }

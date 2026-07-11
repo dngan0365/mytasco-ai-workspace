@@ -1,0 +1,2 @@
+import Link from "next/link"; import { ArrowLeft } from "lucide-react"; import { DocumentForm } from "@/components/features/documents/DocumentForm";
+export default function NewDocumentPage() { return <div className="mx-auto max-w-4xl"><Link href="/documents" className="inline-flex items-center gap-2 text-sm font-semibold text-stone-500"><ArrowLeft className="h-4 w-4"/>Thư viện</Link><h1 className="mt-6 text-3xl font-bold">Tạo tài liệu mới</h1><p className="mt-2 text-sm text-stone-500">Thêm nội dung vào kho tri thức của doanh nghiệp.</p><DocumentForm/></div>; }

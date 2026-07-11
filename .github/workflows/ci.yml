@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/orchestrator
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Cài dependency (orchestrator + mytasco-adapter)
+        run: |
+          pip install -r requirements.txt
+          pip install ruff
+
+      - name: Lint (ruff)
+        run: ruff check app
+
+      - name: Unit test (pytest)
+        run: pytest -v
+
+  ingestion-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/ingestion
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Cài dependency
+        run: pip install -r requirements.txt
+      - name: Build thử index (đảm bảo dataset + script không lỗi)
+        run: python build_index.py

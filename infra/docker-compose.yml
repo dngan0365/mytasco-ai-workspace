@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  # Chuẩn bị sẵn cho bước nâng cấp retrieval từ TF-IDF lên embedding thật.
+  # Chưa được orchestrator dùng tới ở bản demo hiện tại (xem docs/architecture.md mục 5).
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  # Chuẩn bị sẵn cho việc chuyển metadata/permission từ in-memory sang DB thật.
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: mytasco
+      POSTGRES_USER: mytasco
+      POSTGRES_PASSWORD: mytasco_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mytasco-mock:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./mock-server:/app
+    command: sh -c "npm install --silent && node mock_mytasco_server.js"
+    ports:
+      - "8788:8788"
+
+  orchestrator:
+    build:
+      context: ..
+      dockerfile: services/orchestrator/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - MYTASCO_MOCK_BASE_URL=http://mytasco-mock:8788
+      - JWT_SECRET=please-change-me-in-production
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    depends_on:
+      - mytasco-mock
+      - qdrant
+      - postgres
+
+volumes:
+  qdrant_data:
+  postgres_data:
+

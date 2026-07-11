@@ -1,0 +1,2 @@
+@tailwind base; @tailwind components; @tailwind utilities;
+:root { color-scheme: light; } * { box-sizing: border-box; } body { margin: 0; color: #1c1917; background: #f5f4ef; } button, input, select, textarea { font: inherit; } ::selection { background: #d5f66f; color: #142b28; }

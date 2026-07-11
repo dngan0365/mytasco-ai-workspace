@@ -1,0 +1,1 @@
+import { LoaderCircle } from "lucide-react"; export function LoadingSpinner({ label = "Đang tải dữ liệu…" }: { label?: string }) { return <div className="flex min-h-40 flex-col items-center justify-center gap-3 text-sm text-stone-500"><LoaderCircle className="h-6 w-6 animate-spin text-emerald-700"/><span>{label}</span></div>; }

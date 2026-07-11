@@ -1,0 +1,12 @@
+aws_region      = "ap-southeast-1"
+project_name    = "mytasco-ai-workspace"
+environment     = "dev"
+vpc_id          = "vpc-xxxxxxxx"
+subnet_ids      = ["subnet-aaaaaaa", "subnet-bbbbbbb"]
+container_image = "ghcr.io/your-org/mytasco-orchestrator:latest"
+
+# Không commit file terraform.tfvars thật (đã có trong .gitignore).
+# Đặt db_password / openai_api_key qua biến môi trường thay vì file:
+#   export TF_VAR_db_password="..."
+#   export TF_VAR_openai_api_key="..."
+

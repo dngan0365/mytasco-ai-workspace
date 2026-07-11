@@ -1,0 +1,38 @@
+name: Deploy Dev
+
+on:
+  workflow_run:
+    workflows: ["Build & Push Image"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Điền credential thật trong Settings > Secrets and variables > Actions:
+      #   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION,
+      #   ECS_CLUSTER_NAME, ECS_SERVICE_NAME
+      - name: Cấu hình AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Force new deployment lên ECS Fargate (image :latest vừa build)
+        run: |
+          aws ecs update-service \
+            --cluster "${{ secrets.ECS_CLUSTER_NAME }}" \
+            --service "${{ secrets.ECS_SERVICE_NAME }}" \
+            --force-new-deployment
+
+      - name: Chờ service ổn định
+        run: |
+          aws ecs wait services-stable \
+            --cluster "${{ secrets.ECS_CLUSTER_NAME }}" \
+            --services "${{ secrets.ECS_SERVICE_NAME }}"

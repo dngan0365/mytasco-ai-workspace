@@ -1,0 +1,41 @@
+name: Build & Push Image
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/orchestrator/**"
+      - "services/mytasco-adapter/**"
+      - ".github/workflows/build-push.yml"
+
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/mytasco-orchestrator
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Đăng nhập GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: services/orchestrator/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

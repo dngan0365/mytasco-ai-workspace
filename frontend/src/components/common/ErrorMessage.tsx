@@ -1,0 +1,2 @@
+import { CircleAlert } from "lucide-react"; import { Button } from "./Button";
+export function ErrorMessage({ message, retry }: { message: string; retry?: () => void }) { return <div className="rounded-2xl border border-red-100 bg-red-50 p-5 text-red-800"><div className="flex items-start gap-3"><CircleAlert className="mt-0.5 h-5 w-5"/><div><p className="font-semibold">Không thể tải dữ liệu</p><p className="mt-1 text-sm text-red-700">{message}</p>{retry && <Button variant="secondary" className="mt-3 h-9" onClick={retry}>Thử lại</Button>}</div></div></div>; }

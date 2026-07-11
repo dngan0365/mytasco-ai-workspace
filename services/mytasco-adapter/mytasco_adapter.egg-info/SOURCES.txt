@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+mytasco_adapter/__init__.py
+mytasco_adapter/client.py
+mytasco_adapter.egg-info/PKG-INFO
+mytasco_adapter.egg-info/SOURCES.txt
+mytasco_adapter.egg-info/dependency_links.txt
+mytasco_adapter.egg-info/requires.txt
+mytasco_adapter.egg-info/top_level.txt
