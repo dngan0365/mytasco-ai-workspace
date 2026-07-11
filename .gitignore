@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+node_modules/
+package-lock.json
+*.log
+.pytest_cache/
+.DS_Store
+
+# Build artifact của services/ingestion — sinh ra lúc chạy, không commit
+services/ingestion/output/*.pkl
+
+# Terraform
+infra/terraform/.terraform/
+infra/terraform/*.tfstate
+infra/terraform/*.tfstate.backup
+infra/terraform/tfplan
+infra/terraform/terraform.tfvars
